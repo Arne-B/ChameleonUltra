@@ -52,14 +52,6 @@ def check_tools():
         print(f'{CR}Warning, tools {", ".join(missing_tools)} not found. '
               f'Corresponding commands will not work as intended.{C0}')
 
-dict_keys = set()
-def load_dic_file(filename, keys):
-    #print("Read directory from", filename) ## debug
-    for dict_key in filename.readlines():
-        if not dict_key.startswith("#") and not dict_key.isspace():
-            dict_keys.add(dict_key)
-
-    return dict_keys
 
 class BaseCLIUnit:
     def __init__(self):
@@ -951,12 +943,17 @@ class HFMFFCHK(ReaderRequiredUnit):
                 return
 
         if args.import_dic is not None:
-            for key in load_dic_file(args.import_dic, keys):
-                if not re.match(r'^[a-fA-F0-9]{12}$', key):
+            for key in args.import_dic.readlines():
+                if key.startswith("#"): # ignore comments
+                    pass
+                elif key.isspace(): # ignore empty lines
+                    pass
+                elif re.match(r'^[a-fA-F0-9]{12}$', key): # take only this key format
+                    keys.add(bytes.fromhex(key))
+                else: # in case of another format, a conversion is needed
                     print(f' - {CR}Key should in hex[12] format, invalid key is ignored{C0}, key = "{key}"')
-                    continue            
-                keys.add(bytes.fromhex(key))
-
+                    continue
+                    
         if len(keys) == 0:
             print(f' - {CR}No keys{C0}')
             return
