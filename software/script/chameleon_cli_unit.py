@@ -56,7 +56,7 @@ dict_keys = set()
 def load_dic_file(filename, keys):
     #print("Read directory from", filename) ## debug
     for dict_key in filename.readlines():
-        if not dict_key.startswith("#") and not dict_key is None:
+        if not dict_key.startswith("#") and not dict_key.isspace():
             dict_keys.add(dict_key)
 
     return dict_keys
