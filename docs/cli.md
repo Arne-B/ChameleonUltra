@@ -56,7 +56,7 @@ To use after installing, just do the following:
 
 #### WSL2
 
-Coming Soon
+Use usbipd-win to expose COM-Port within WSL. (https://learn.microsoft.com/de-de/windows/wsl/connect-usb)
 
 #### WSL1
 
